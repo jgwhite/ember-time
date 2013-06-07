@@ -13,7 +13,7 @@ First up, let’s figure out how we want to use this in our templates.
 Let’s say we want a `fromNow` helper to match Moment’s API. Let’s add that
 to our application template:
 
-```handlebars
+```html
 <script type="text/x-handlebars">
   <p>Created {{fromNow valueBinding="createdAt"}}</p>
 </script>
@@ -174,7 +174,7 @@ App.ClockController = Ember.Controller.extend({
 });
 ```
 
-```handlebars
+```html
 <script type="text/x-handlebars">
   <h1>Ember Time</h1>
 
