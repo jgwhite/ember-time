@@ -34,7 +34,7 @@ This is why we must refer to `view.time` in the template.
 
 Now how do we get this view to periodically re-render?
 
-We need some kinda of tick function that gets run every second. How about this:
+We need some kind of tick function that gets run every second. How about this:
 
 ```javascript
 App.TimeView = Ember.View.extend({
@@ -51,3 +51,5 @@ App.TimeView = Ember.View.extend({
 
 });
 ```
+
+**Explanation to be completed soon...**
