@@ -23,9 +23,8 @@ If we reload the page we get an error telling us that `fromNow` is not
 defined anywhere. So let’s define it.
 
 This timestamp is going to have continued behaviour for as long as it’s
-displayed, so let’s give it a proper view class of its own.
-
-We probably want it to use the `time` tag and render the result of running
+displayed, so let’s give it a proper view class of its own. We probably
+want it to use the `time` tag and render the result of running
 Moment’s `fromNow` method on whatever it’s value is.
 
 ```javascript
@@ -42,13 +41,14 @@ App.FromNowView = Ember.View.extend({
 
 Note that we use `view.output` rather than simply `output`. This is
 because Ember’s views try their best to get out of the way of the
-surrounding context of the templates. If you want to access a property
-of the view in it’s template, you need to be specific.
+surrounding context. If we want to access a property
+of the view in it’s template, we need to be specific.
 
-Ember lets us register a shortcut to this view as follows:
+Now we’ve got our view class, Ember lets us register a shortcut
+as follows:
 
 ```javascript
-Ember.Handlebars.helper('time', App.FromNowView);
+Ember.Handlebars.helper('fromNow', App.FromNowView);
 ```
 
 If we refresh the page now, we’ll actually see the reasonable output
@@ -60,7 +60,7 @@ Let’s define `createdAt` so it’ll become the value of our view.
 
 We’re rendering the view in the application template, which is backed
 by the singleton instance of our `ApplicationController`, so let’s
-set createdAt there:
+set `createdAt` there:
 
 ```javascript
 App.ApplicationController = Ember.Controller.extend({
@@ -69,7 +69,7 @@ App.ApplicationController = Ember.Controller.extend({
 ```
 
 Refreshing the page should show something like 'Created 2 years ago'.
-This is great, but now so good for our demo, so let’s say that
+This is great, but not so good for our demo, so let’s say that
 `createdAt` is set to the current time when the app is booted.
 
 ```javascript
@@ -83,7 +83,7 @@ everything’s bound together properly now. It’s time to make this clock
 tick.
 
 Our `FromNowView` probably needs some sort of `tick` method to trigger
-the redraw. Digging into Ember’s API docs reveals some very helpful
+the re-render. Digging into Ember’s API docs reveals some very helpful
 methods in the `Ember.run` namespace. We’ll also need to start this
 clock ticking, so let’s use the `didInsertElement` hook.
 
@@ -131,13 +131,14 @@ automatically update to 'Created a minute ago' and so on.
 This is a good start, but there’s a little problem — there’s nothing
 to clean up our `tick` method. If we switch states away from this template
 `tick` might get called when the view is no longer on display and we’ll
-get errors.
+get errors, not to mention memory leaks.
 
 Digging into Ember’s docs again, we find views have a `willDestroyElement`
 hook and Ember provides `Ember.run.cancel` to cancel deferred execution.
 So we’ll need to keep a handle on our deferred tick execution and be sure
 to cancel it when the view is destroyed.
 
+```javascript
 App.FromNowView = Ember.View.extend({
   // ...
 
@@ -155,6 +156,7 @@ App.FromNowView = Ember.View.extend({
     Ember.run.cancel(nextTick);
   }
 });
+```
 
 To check this has all worked, let’s rearrange the app a bit. We’ll
 create a `clock` route that contains our `fromNow` helper, and jump
@@ -196,9 +198,3 @@ If everything’s worked, now when we navigate to 'Clock' we should see
 enough we’ll see 'Created a minute ago'. We should also see the console
 logging 'tick' every second and—all being well—when we navigate back
 to 'Home' we’ll see the console stops logging 'tick'.
-
----
-
-Hopefully this little example has demonstrated some of the tools Ember
-has to offer, and also how leads naturally towards modular and decoupled
-application architecture.
