@@ -9,22 +9,18 @@
 <body>
 
   <script type="text/x-handlebars">
+    <h1>Ember Time</h1>
+
     <nav>
+      {{#linkTo index}}Home{{/linkTo}}
       {{#linkTo clock}}Clock{{/linkTo}}
-      {{#linkTo about}}About{{/linkTo}}
     </nav>
 
-    <p>
-      {{outlet}}
-    </p>
+    {{outlet}}
   </script>
 
   <script type="text/x-handlebars" data-template-name="clock">
-    The time is {{time}}
-  </script>
-
-  <script type="text/x-handlebars" data-template-name="about">
-    Check the console to see the clock is no longer ticking.
+    <p>Created {{fromNow valueBinding="createdAt"}}</p>
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>

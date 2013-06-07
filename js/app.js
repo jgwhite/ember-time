@@ -2,22 +2,24 @@ App = Ember.Application.create();
 
 App.Router.map(function() {
   this.route('clock');
-  this.route('about');
 });
 
-App.IndexRoute = Ember.Route.extend({
-  redirect: function() {
-    this.transitionTo('clock');
-  }
+App.ApplicationController = Ember.Controller.extend({
+  createdAt: new Date()
 });
 
-App.TimeView = Ember.View.extend({
+App.ClockController = Ember.Controller.extend({
+  createdAt: new Date()
+});
+
+App.FromNowView = Ember.View.extend({
   tagName: 'time',
-  template: Em.Handlebars.compile('{{view.time}}'),
 
-  time: function() {
-    return moment().format('HH:mm:ss');
-  }.property(),
+  template: Ember.Handlebars.compile('{{view.output}}'),
+
+  output: function() {
+    return moment(this.get('value')).fromNow();
+  }.property('value'),
 
   didInsertElement: function() {
     this.tick();
@@ -26,10 +28,9 @@ App.TimeView = Ember.View.extend({
   tick: function() {
     var nextTick = Ember.run.later(this, function() {
       console.log('tick');
-      this.notifyPropertyChange('time');
+      this.notifyPropertyChange('value');
       this.tick();
     }, 1000);
-
     this.set('nextTick', nextTick);
   },
 
@@ -37,7 +38,6 @@ App.TimeView = Ember.View.extend({
     var nextTick = this.get('nextTick');
     Ember.run.cancel(nextTick);
   }
-
 });
 
-Em.Handlebars.helper('time', App.TimeView);
+Ember.Handlebars.helper('fromNow', App.FromNowView);
