@@ -198,3 +198,10 @@ If everything’s worked, now when we navigate to 'Clock' we should see
 enough we’ll see 'Created a minute ago'. We should also see the console
 logging 'tick' every second and—all being well—when we navigate back
 to 'Home' we’ll see the console stops logging 'tick'.
+
+---
+
+I hope this little tale of Ember development proves useful to someone
+out there. If you’ve read through all this and still have a few minutes
+to spare, I recommend this inspirational video:
+http://youtu.be/5kgUL_FfUZY?t=1h1m13s
