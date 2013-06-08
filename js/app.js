@@ -4,10 +4,6 @@ App.Router.map(function() {
   this.route('clock');
 });
 
-App.ApplicationController = Ember.Controller.extend({
-  createdAt: new Date()
-});
-
 App.ClockController = Ember.Controller.extend({
   createdAt: new Date()
 });
