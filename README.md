@@ -1,4 +1,4 @@
-# Ember Period Execution Example
+# Ember Time
 
 A friend recently asked about the best approach for implementing a
 particular feature in Ember. They wanted to use moment.js to show createdAt
