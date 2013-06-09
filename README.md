@@ -2,7 +2,7 @@
 
 A friend recently asked about the best approach for implementing a
 particular feature in Ember. They wanted to use moment.js to show createdAt
-times in 'time ago' format -- and wanted them to update each minute.
+times in ‘time ago’ format -- and wanted them to update each minute.
 
 This is a common feature, but it’s not covered in Ember’s guides and
 appears to fall slightly outside of the golden path. So let’s try
@@ -22,10 +22,17 @@ to our application template:
 If we reload the page we get an error telling us that `fromNow` is not
 defined anywhere. So let’s define it.
 
-This timestamp is going to have continued behaviour for as long as it’s
-displayed, so let’s give it a proper view class of its own. We probably
-want it to use the `time` tag and render the result of running
-Moment’s `fromNow` method on whatever it’s value is.
+This feature involves continued behaviour, so we probably don’t want a
+one-shot helper. Instead, let’s have our helper delegate to a taylored
+view class.
+
+```javascript
+Ember.Handlebars.helper('fromNow', App.FromNowView);
+```
+
+Now to define that view class. We probably want it to use the `time`
+tag and render the result of running Moment’s `fromNow` method on
+whatever its value is.
 
 ```javascript
 App.FromNowView = Ember.View.extend({
@@ -43,16 +50,11 @@ Note that we use `view.output` rather than simply `output`. This is
 because Ember’s views try their best to get out of the way of the
 surrounding context. If we want to access a property
 of the view in it’s template, we need to be specific.
-
-Now we’ve got our view class, Ember lets us register a shortcut
-as follows:
-
-```javascript
-Ember.Handlebars.helper('fromNow', App.FromNowView);
-```
+Also note that the view class will need to be defined above before
+the helper, as it references it directly.
 
 If we refresh the page now, we’ll actually see the reasonable output
-of 'Created a few seconds ago'. This is because our view’s value is
+of ‘Created a few seconds ago’. This is because our view’s value is
 not defined and `moment(undefined)` creates a moment object for the
 current time.
 
@@ -68,7 +70,7 @@ App.ApplicationController = Ember.Controller.extend({
 });
 ```
 
-Refreshing the page should show something like 'Created 2 years ago'.
+Refreshing the page should show something like ‘Created 2 years ago’.
 This is great, but not so good for our demo, so let’s say that
 `createdAt` is set to the current time when the app is booted.
 
@@ -78,7 +80,7 @@ App.ApplicationController = Ember.Controller.extend({
 });
 ```
 
-We’re back to our 'Created a few seconds ago' output, but we know
+We’re back to our ‘Created a few seconds ago’ output, but we know
 everything’s bound together properly now. It’s time to make this clock
 tick.
 
@@ -105,7 +107,7 @@ App.FromNowView = Ember.View.extend({
 });
 ```
 
-If we open the javascript console now, we should see 'tick' written to
+If we open the javascript console now, we should see ‘tick’ written to
 the log every second. That’s a start, now we need to figure out how to
 re-render the view. Digging again into Ember’s API docs, we find a method
 called `notifyPropertyChange` on `Ember.View`. That sounds like it might
@@ -125,8 +127,8 @@ App.FromNowView = Ember.View.extend({
 });
 ```
 
-Leave the page for 60 seconds and we should see 'Created a few seconds ago'
-automatically update to 'Created a minute ago' and so on.
+Leave the page for 60 seconds and we should see ‘Created a few seconds ago’
+automatically update to ‘Created a minute ago’ and so on.
 
 This is a good start, but there’s a little problem — there’s nothing
 to clean up our `tick` method. If we switch states away from this template
@@ -193,15 +195,20 @@ App.ClockController = Ember.Controller.extend({
 </script>
 ```
 
-If everything’s worked, now when we navigate to 'Clock' we should see
-'Created a few seconds ago' and if we leave the app in this state long
-enough we’ll see 'Created a minute ago'. We should also see the console
-logging 'tick' every second and—all being well—when we navigate back
-to 'Home' we’ll see the console stops logging 'tick'.
+If everything’s worked, now when we navigate to ‘Clock’ we should see
+‘Created a few seconds ago’ and if we leave the app in this state long
+enough we’ll see ‘Created a minute ago’. We should also see the console
+logging ‘tick’ every second and—all being well—when we navigate back
+to ‘Home’ we’ll see the console stops logging ‘tick’.
 
----
+You can find all of this put together in the [Ember Time Repo][repo] and
+[very basic demo][demo].
 
 I hope this little tale of Ember development proves useful to someone
 out there. If you’ve read through all this and still have a few minutes
-to spare, I recommend this inspirational video:
-http://youtu.be/5kgUL_FfUZY?t=1h1m13s
+to spare, I recommend [this inspirational video][mamba-time].
+
+[repo]: https://github.com/jgwhite/ember-time
+[twitter]: http://twitter.com/jgwhite
+[demo]: http://jgwhite.co.uk/ember-time
+[mamba-time]: http://youtu.be/5kgUL_FfUZY?t=1h1m13s
