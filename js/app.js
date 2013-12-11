@@ -24,7 +24,7 @@ App.FromNowView = Ember.View.extend({
   tick: function() {
     var nextTick = Ember.run.later(this, function() {
       console.log('tick');
-      this.notifyPropertyChange('value');
+      this.notifyPropertyChange('output');
       this.tick();
     }, 1000);
     this.set('nextTick', nextTick);
