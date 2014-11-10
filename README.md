@@ -1,5 +1,11 @@
 # Ember Time
 
+## Note
+
+This repo is fairly old and pre-dates components. [@evolve2k](https://github.com/evolve2k) has created [a JSBin demonstrating the same approach implemented as a component](http://emberjs.jsbin.com/dekewo/8/edit?html,css,js,output).
+
+## Preamble
+
 A friend recently asked about the best approach for implementing a
 particular feature in Ember. They wanted to use moment.js to show createdAt
 times in 'time ago' format -- and wanted them to update each minute.
