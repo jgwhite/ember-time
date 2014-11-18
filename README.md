@@ -2,7 +2,7 @@
 
 ## Note
 
-This repo is fairly old and pre-dates components. [@evolve2k](https://github.com/evolve2k) has created [a JSBin demonstrating the same approach implemented as a component](http://emberjs.jsbin.com/dekewo/8/edit?html,css,js,output).
+This repo is fairly old and pre-dates components. [@evolve2k](https://github.com/evolve2k) has created [a JSBin demonstrating the same approach implemented as a component](http://emberjs.jsbin.com/dekewo/8/edit?html,css,js,output). Credit to [@locks](https://github.com/locks) for the code.
 
 ## Preamble
 
